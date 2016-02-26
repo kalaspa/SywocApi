@@ -4,8 +4,8 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import status
 
-from inscriptions.models import Boat , Crewmate
-from inscriptions.serializers import BoatSerializer , CrewmateSerializer
+from boats.models import Boat , Crewmate
+from boats.serializers import BoatSerializer , CrewmateSerializer
 # Create your views here.
 
 class BoatViewSet (viewsets.ModelViewSet):
@@ -39,3 +39,7 @@ class BoatViewSet (viewsets.ModelViewSet):
 		name, crew = request.data.get('name') , request.data.get('crew')
 		boat = Boat.objects.get_or_create(name=name,category=category)
 		return Response({'status': 'Boat created'})
+
+class CrewmateViewSet (viewsets.ModelViewSet):
+	queryset = Crewmate.objects.all()
+	serializer_class = CrewmateSerializer

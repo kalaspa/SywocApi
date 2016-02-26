@@ -8,7 +8,7 @@ class Crewmate (models.Model):
     firstname = models.CharField(max_length=50)
 
     def __str__(self):
-		return "{0} {1}".format(self.lastname , self.firstname)
+        return "{0} {1}".format(self.lastname , self.firstname)
 
 class Boat (models.Model):
 
@@ -17,7 +17,7 @@ class Boat (models.Model):
     email = models.EmailField()
 
     number = models.IntegerField()
-    crew = models.ManyToManyField(crewmate)
+    crew = models.ManyToManyField(Crewmate)
 
     payment = models.BooleanField(null=False)
     ranking = models.IntegerField(null=0)
@@ -26,4 +26,4 @@ class Boat (models.Model):
     deleted = models.BooleanField(null=False)
 
     def __str__(self):
-		return "{0} {1} {0}".format(self.name , self.university , self.email)
+        return "{0} {1} {0}".format(self.name , self.university , self.email)
