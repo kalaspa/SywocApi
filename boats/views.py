@@ -3,14 +3,17 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from boats.models import Boat , Crewmate
 from boats.serializers import BoatSerializer , CrewmateSerializer
+from boats.permissions import IsOwnerOrReadOnly
 # Create your views here.
 
 class BoatViewSet (viewsets.ModelViewSet):
 	queryset = Boat.objects.all()
 	serializer_class = BoatSerializer
+	permission_classes = (IsOwnerOrReadOnly,)
 
 	@detail_route(methods=['post'])
 	def pay(self, request, pk=None):
