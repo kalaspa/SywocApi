@@ -16,14 +16,18 @@ Including another URLconf
 from django.conf.urls import include , url
 from django.contrib import admin
 from rest_framework import routers
-from boats.views import BoatViewSet , CrewmateViewSet
+from boats.views import BoatViewSet , CrewmateViewSet , UserViewSet
+from rest_framework.authtoken import views
 
 router = routers.DefaultRouter()
 router.register(r'boats', BoatViewSet)
 router.register(r'crewmates', CrewmateViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^register/', 'boats.views.create_auth'),
+    url(r'^api-token-auth/', views.obtain_auth_token),
 ]
