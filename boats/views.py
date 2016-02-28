@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly , IsAdminUser
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 from boats.models import Boat , Crewmate
 from boats.serializers import BoatSerializer , CrewmateSerializer , UserSerializer
@@ -19,7 +20,7 @@ class UserViewSet (viewsets.ModelViewSet):
 class BoatViewSet (viewsets.ModelViewSet):
 	queryset = Boat.objects.all()
 	serializer_class = BoatSerializer
-	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+	#permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
