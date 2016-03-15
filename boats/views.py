@@ -4,44 +4,48 @@ from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly , IsAdminUser
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import detail_route, list_route
 
 from boats.models import Boat , Crewmate
-from boats.serializers import BoatSerializer , CrewmateSerializer , UserSerializer
-from boats.permissions import IsOwnerOrReadOnly
+from boats.serializers import BoatSerializer , CrewmateSerializer
+from users.permissions import IsOwnerOrReadOnly
 # Create your views here.
 
-class UserViewSet (viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
-	permission_classes = (IsAdminUser,)
 
 class BoatViewSet (viewsets.ModelViewSet):
 	queryset = Boat.objects.all()
 	serializer_class = BoatSerializer
-	#permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+	permission_classes = (IsOwnerOrReadOnly,)
 
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
+
+	@list_route()
+	def myboat(self, request):
+		boat = Boat.objects.all().filter(owner=request.user)
+		serialized = self.get_serializer(boat, many=True)
+		return Response(serialized.data)
+
+	@detail_route(methods=['POST'], permission_classes=[IsAdminUser,])
+	def pay(self, request, pk=None):
+		boat = Boat.objects.all().filter(id=pk)[0]
+		if boat.payment == None:
+			boat.payment = True
+		else:
+			boat.payment ^= True
+		boat.save()
+		return Response('Payment changed')
 
 class CrewmateViewSet (viewsets.ModelViewSet):
 	queryset = Crewmate.objects.all()
 	serializer_class = CrewmateSerializer
-	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+	permission_classes = (IsOwnerOrReadOnly,)
 
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
 
-@api_view(['POST'])
-def create_auth(request):
-	serialized = UserSerializer(data=request.data)
-	if serialized.is_valid():
-		User.objects.create_user(
-			serialized.data['username'],
-			serialized.data['email'],
-			serialized.data['password']
-		)
-		return Response(serialized.data, status=status.HTTP_201_CREATED)
-	else:
-		return Response(serialized._errors , status=status.HTTP_400_BAD_REQUEST)
+	@list_route()
+	def mycrew(self, request):
+		crew = Crewmate.objects.all().filter(owner=request.user)
+		serialized = self.get_serializer(crew, many=True)
+		return Response(serialized.data)

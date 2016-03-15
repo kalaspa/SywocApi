@@ -1,14 +1,4 @@
 from django.db import models
-from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
-
-#Allow users to receive an authentication token
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
 
 # Create your models here.
 class Boat (models.Model):
@@ -25,7 +15,7 @@ class Boat (models.Model):
     deleted = models.NullBooleanField()
 
     def __str__(self):
-        return "{0} {1} {0}".format(self.name , self.university , self.email)
+        return "{0} {1}".format(self.name , self.university)
 
 class Crewmate (models.Model):
 
