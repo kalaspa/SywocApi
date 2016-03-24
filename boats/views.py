@@ -27,14 +27,34 @@ class BoatViewSet (viewsets.ModelViewSet):
 		return Response(serialized.data)
 
 	@detail_route(methods=['POST'], permission_classes=[IsAdminUser,])
-	def pay(self, request, pk=None):
+	def pay1(self, request, pk=None):
 		boat = Boat.objects.all().filter(id=pk)[0]
-		if boat.payment == None:
-			boat.payment = True
+		if boat.payment1 == None:
+			boat.payment1 = True
 		else:
-			boat.payment ^= True
+			boat.payment1 ^= True
 		boat.save()
 		return Response('Payment changed')
+
+	@detail_route(methods=['POST'], permission_classes=[IsAdminUser,])
+	def pay2(self, request, pk=None):
+		boat = Boat.objects.all().filter(id=pk)[0]
+		if boat.payment2 == None:
+			boat.payment2 = True
+		else:
+			boat.payment2 ^= True
+		boat.save()
+		return Response('Payment changed')
+
+	@detail_route(methods=['POST'], permission_classes=[IsAdminUser,])
+	def abandon(self, request, pk=None):
+		boat = Boat.objects.all().filter(id=pk)[0]
+		if boat.abandon == None:
+			boat.abandon = True
+		else:
+			boat.abandon ^= True
+		boat.save()
+		return Response('Abandon changed')
 
 class CrewmateViewSet (viewsets.ModelViewSet):
 	queryset = Crewmate.objects.all()

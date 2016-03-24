@@ -25,6 +25,9 @@ SECRET_KEY = 't=-@pj9%_-j=b2flk+hv3(q91knw&yj0m+v8b69rt^x7lldrn2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# SECURITY WARNING: Keep the inscription code secret
+SECRET_CODE = 'sywoc'
+
 ALLOWED_HOSTS = []
 
 

@@ -9,7 +9,9 @@ class Boat (models.Model):
     university = models.CharField(max_length=100)
     email = models.EmailField()
 
-    payment = models.NullBooleanField()
+    payment1 = models.NullBooleanField()
+    payment2 = models.NullBooleanField()
+    abandon = models.NullBooleanField()
     score = models.IntegerField(null=True)
 
     deleted = models.NullBooleanField()

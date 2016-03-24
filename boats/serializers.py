@@ -8,8 +8,8 @@ class BoatSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Boat
-		fields = ('id' , 'name' , 'university' , 'payment' , 'owner' )
-		read_only_fields = ('payment',)
+		fields = ('id' , 'name' , 'university' , 'payment1' ,'payment2', 'owner', 'abandon' )
+		read_only_fields = ('payment1', 'payment2', 'abandon',)
 
 class CrewmateSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.username')
